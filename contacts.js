@@ -1,28 +1,54 @@
-const fs = require('fs');
+const fs = require('fs').promises;
 const path = require('path');
 
-// console.log(path.resolve('./db/contacts.json'));
+const contactsPath = path.join(__dirname, './db/contacts.json');
 
-const contactsPath = path.resolve('./db/contacts.json');
-console.log(contactsPath);
-
-// TODO: задокументировать каждую функцию
-function listContacts() {
-  fs.readFile(contactsPath, 'utf8', (error, data) => {
-    console.table(JSON.parse(data).map(contact => contact));
-  });
+async function listContacts() {
+  try {
+    const data = await fs.readFile(contactsPath, 'utf8');
+    return JSON.parse(data);
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-function getContactById(contactId) {
-  // ...твой код
+async function getContactById(contactId) {
+  try {
+    const contactList = await listContacts();
+    return contactList.find(contact => contact.id === contactId.toString());
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-function removeContact(contactId) {
-  // ...твой код
+async function removeContact(contactId) {
+  try {
+    const contactList = await listContacts();
+    const updatedContactList = contactList.filter(
+      contact => contact.id !== contactId.toString(),
+    );
+
+    fs.writeFile(contactsPath, JSON.stringify(updatedContactList), 'utf8');
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-function addContact(name, email, phone) {
-  // ...твой код
+async function addContact(name, email, phone) {
+  try {
+    const contactList = await listContacts();
+    const data = { id: '11', name, email, phone };
+    const newData = [...contactList, data];
+
+    fs.writeFile(contactsPath, JSON.stringify(newData), 'utf8');
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-listContacts();
+module.exports = {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+};

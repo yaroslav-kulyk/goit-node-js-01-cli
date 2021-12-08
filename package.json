@@ -21,5 +21,8 @@
   "homepage": "https://github.com/yaroslav-kulyk/goit-node-js-01-cli#readme",
   "devDependencies": {
     "nodemon": "^2.0.15"
+  },
+  "dependencies": {
+    "yargs": "^17.3.0"
   }
 }
