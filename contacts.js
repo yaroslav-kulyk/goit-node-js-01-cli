@@ -32,7 +32,9 @@ async function getContactById(contactId) {
 async function removeContact(contactId) {
   try {
     const contacts = await listContacts();
-    const idx = contacts.findIndex(contact => contact.id === contactId);
+    const idx = contacts.findIndex(
+      contact => contact.id === contactId.toString(),
+    );
     if (idx === -1) {
       return null;
     }
